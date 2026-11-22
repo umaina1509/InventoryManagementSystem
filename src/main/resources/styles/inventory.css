@@ -1,0 +1,151 @@
+/* Inventory Management System - JavaFX stylesheet
+   Palette: white background, blue (#1F5FA8) accent, greys for structure. */
+
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-accent: #1F5FA8;
+    -fx-focus-color: #1F5FA8;
+    -fx-faint-focus-color: transparent;
+}
+
+/* ---- Header ---- */
+.header {
+    -fx-background-color: white;
+    -fx-padding: 14 20 12 20;
+    -fx-border-color: transparent transparent #D0D5DB transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.app-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F5FA8;
+}
+.app-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+/* ---- Section headings ---- */
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+/* ---- Form panel ---- */
+.form-pane {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #D0D5DB;
+    -fx-border-width: 1;
+}
+.form-pane .label {
+    -fx-text-fill: #374151;
+}
+.hint {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+}
+
+/* ---- Inputs ---- */
+.text-field, .combo-box-base {
+    -fx-background-color: white;
+    -fx-border-color: #B8BEC6;
+    -fx-border-width: 1;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+.text-field:focused, .combo-box-base:focused {
+    -fx-border-color: #1F5FA8;
+}
+
+/* ---- Buttons ---- */
+.button {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #1F2937;
+    -fx-border-color: #B8BEC6;
+    -fx-border-width: 1;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+}
+.button:hover {
+    -fx-background-color: #D8DBE0;
+}
+.button:pressed {
+    -fx-background-color: #C9CDD3;
+}
+.button.primary {
+    -fx-background-color: #1F5FA8;
+    -fx-border-color: #174A85;
+    -fx-text-fill: white;
+}
+.button.primary:hover {
+    -fx-background-color: #1A5191;
+}
+.button.primary:pressed {
+    -fx-background-color: #174A85;
+}
+
+/* ---- Table ---- */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #D0D5DB;
+    -fx-border-width: 1;
+    -fx-table-cell-border-color: #E5E7EB;
+}
+.table-view .column-header-background {
+    -fx-background-color: #F3F4F6;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: transparent #D0D5DB #D0D5DB transparent;
+    -fx-size: 32;
+}
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-cell-size: 32;
+}
+.table-row-cell:odd {
+    -fx-background-color: #FAFAFB;
+}
+.table-row-cell:selected {
+    -fx-background-color: #D6E4F5;
+}
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #111827;
+}
+.table-cell {
+    -fx-text-fill: #1F2937;
+    -fx-alignment: CENTER-LEFT;
+}
+.table-view .placeholder .label {
+    -fx-text-fill: #6B7280;
+}
+
+/* Status text in the table */
+.table-cell.status-in  { -fx-text-fill: #1F5FA8; -fx-font-weight: bold; }
+.table-cell.status-low { -fx-text-fill: #374151; -fx-font-weight: bold; }
+.table-cell.status-out { -fx-text-fill: #6B7280; -fx-font-weight: bold; }
+
+/* ---- Feedback messages ---- */
+.feedback-ok    { -fx-text-fill: #1F5FA8; }
+.feedback-error { -fx-text-fill: #B42318; }
+
+/* ---- Bottom bar ---- */
+.status-bar {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #D0D5DB transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 6 20 6 20;
+}
+.status-bar .label {
+    -fx-text-fill: #4B5563;
+    -fx-font-size: 12px;
+}
