@@ -115,7 +115,8 @@
 .placeholder-title,
 .table-view .column-header .label,
 .wordmark,
-.stat-value {
+.stat-value,
+.about-key {
     -fx-font-family: "Manrope SemiBold";
 }
 
@@ -420,7 +421,8 @@
     -fx-text-fill: -c-sidebar-text;
     -fx-opacity: 0.7;
 }
-.button.nav-item {
+.button.nav-item,
+.button.nav-item:focused {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-text-fill: -c-sidebar-text;
@@ -428,7 +430,7 @@
     -fx-padding: 8 12 8 12;
 }
 .button.nav-item:hover,
-.button.nav-item:focused {
+.button.nav-item:focus-visible {
     -fx-background-color: -c-sidebar-hover;
     -fx-border-color: transparent;
     -fx-text-fill: -c-sidebar-title;
@@ -545,7 +547,8 @@
 /* ===================================================================
    Theme toggle (sidebar footer)
    =================================================================== */
-.button.theme-toggle {
+.button.theme-toggle,
+.button.theme-toggle:focused {
     -fx-background-color: transparent;
     -fx-border-color: -c-sidebar-hover;
     -fx-text-fill: -c-sidebar-text;
@@ -553,11 +556,48 @@
     -fx-padding: 8 12 8 12;
 }
 .button.theme-toggle:hover,
-.button.theme-toggle:focused {
+.button.theme-toggle:focus-visible {
     -fx-background-color: -c-sidebar-hover;
     -fx-border-color: -c-accent;
     -fx-text-fill: -c-sidebar-title;
 }
 .button.theme-toggle .icon {
     -fx-fill: -c-accent;
+}
+
+/* ===================================================================
+   About page
+   =================================================================== */
+.about-card {
+    -fx-padding: 24 24 24 24;
+}
+.about-key {
+    -fx-text-fill: -c-muted;
+}
+.about-value {
+    -fx-text-fill: -c-text;
+}
+
+/* ===================================================================
+   Dialogs (the dialog pane is the root of its own window)
+   =================================================================== */
+.dialog-pane {
+    -fx-background-color: -c-surface;
+    -fx-padding: 8 8 8 8;
+}
+.dialog-pane > .content.label {
+    -fx-text-fill: -c-text;
+    -fx-padding: 16 16 8 16;
+}
+.dialog-pane .header-panel {
+    -fx-background-color: -c-bg;
+    -fx-border-color: transparent transparent -c-border transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.dialog-pane .header-panel .label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -c-text;
+}
+.dialog-pane > .button-bar > .container {
+    -fx-padding: 8 8 8 8;
 }

@@ -17,6 +17,7 @@
 .placeholder-title,
 .table-view .column-header .label,
 .wordmark,
-.stat-value {
+.stat-value,
+.about-key {
     -fx-font-family: "Segoe UI Semibold";
 }

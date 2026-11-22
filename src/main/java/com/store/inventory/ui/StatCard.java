@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
  */
 public class StatCard extends VBox {
 
+    /** Large label showing the number. */
     private final Label valueLabel = new Label("0");
 
     /**

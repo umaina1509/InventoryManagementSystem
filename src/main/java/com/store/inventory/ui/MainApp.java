@@ -22,9 +22,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -45,16 +47,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 /**
  * Main window of the Inventory Management System (JavaFX), branded "StockRoom".
  *
- * <p>The window has a navigation sidebar on the left and the inventory page
- * on the right: a header with search, the items table and an item form. All
- * business rules live in {@link InventoryService}; this class only collects
- * input and displays results.</p>
+ * <p>The window has a navigation sidebar on the left (Inventory, About and a
+ * light/dark theme toggle) and the current page on the right. The inventory
+ * page shows a header with search, live stat cards, the sortable items table
+ * with status filter chips, and an item form. All business rules live in
+ * {@link InventoryService}; this class only collects input and displays
+ * results.</p>
  *
  * @author Mashal and Umaina
  */
@@ -72,6 +78,9 @@ public class MainApp extends Application {
     private static final String NO_FILTER_RESULTS_MESSAGE = "No items match the selected filter.";
     private static final String NO_COMBINED_RESULTS_MESSAGE =
             "No items match your search and the selected filter.";
+
+    /** Stylesheets of the main window, also applied to dialogs. */
+    private final List<String> stylesheets = new ArrayList<>();
 
     private InventoryService service;
     private final ObservableList<Item> tableData = FXCollections.observableArrayList();
@@ -100,6 +109,16 @@ public class MainApp extends Application {
     private Label feedbackLabel;
 
     /**
+     * Creates the application. JavaFX calls this constructor itself; the
+     * window is built later in {@link #start(Stage)}.
+     *
+     * @author Mashal and Umaina
+     */
+    public MainApp() {
+        // nothing to set up before start()
+    }
+
+    /**
      * Builds the main window and shows it.
      *
      * @param stage the primary stage supplied by the JavaFX runtime
@@ -108,13 +127,21 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) {
         boolean fontsLoaded = FontLoader.loadManrope();
+        stylesheets.add(getClass().getResource("/styles/inventory.css").toExternalForm());
+        if (!fontsLoaded) {
+            stylesheets.add(getClass().getResource("/styles/fallback-fonts.css").toExternalForm());
+        }
         service = createService();
 
-        Sidebar sidebar = new Sidebar(APP_NAME, "Inventory management");
-        Button inventoryNav = sidebar.addNavItem("Inventory", () -> { });
-        sidebar.setActive(inventoryNav);
+        Region inventoryView = buildInventoryView();
+        Region aboutView = new AboutView();
+        StackPane contentArea = new StackPane(inventoryView);
 
-        StackPane contentArea = new StackPane(buildInventoryView());
+        Sidebar sidebar = new Sidebar(APP_NAME, "Inventory management");
+        Button inventoryNav = sidebar.addNavItem("Inventory",
+                () -> contentArea.getChildren().setAll(inventoryView));
+        sidebar.addNavItem("About", () -> contentArea.getChildren().setAll(aboutView));
+        sidebar.setActive(inventoryNav);
 
         BorderPane root = new BorderPane();
         root.setLeft(sidebar);
@@ -126,10 +153,7 @@ public class MainApp extends Application {
         refreshTable();
 
         Scene scene = new Scene(root, 1200, 760);
-        scene.getStylesheets().add(getClass().getResource("/styles/inventory.css").toExternalForm());
-        if (!fontsLoaded) {
-            scene.getStylesheets().add(getClass().getResource("/styles/fallback-fonts.css").toExternalForm());
-        }
+        scene.getStylesheets().addAll(stylesheets);
 
         stage.setTitle(APP_NAME + " - Inventory Management System");
         stage.setMinWidth(1060);
@@ -158,6 +182,7 @@ public class MainApp extends Application {
             alert.setHeaderText("Saved inventory could not be loaded");
             alert.setContentText(e.getMessage() + "\n\nThe application will start with an empty, "
                     + "temporary inventory that is not saved to disk.");
+            styleDialog(alert);
             alert.showAndWait();
             return new InventoryService(new InMemoryInventoryRepository());
         }
@@ -547,13 +572,17 @@ public class MainApp extends Application {
             showError("Select an item in the table before deleting.");
             return;
         }
+        ButtonType deleteType = new ButtonType("Delete", ButtonBar.ButtonData.OK_DONE);
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete \"" + selected.getName() + "\"? This cannot be undone.",
-                ButtonType.OK, ButtonType.CANCEL);
+                deleteType, ButtonType.CANCEL);
         confirm.setTitle("Confirm delete");
         confirm.setHeaderText(null);
+        confirm.setGraphic(null);
+        styleDialog(confirm);
+        confirm.getDialogPane().lookupButton(deleteType).getStyleClass().add("danger");
         Optional<ButtonType> answer = confirm.showAndWait();
-        if (answer.isEmpty() || answer.get() != ButtonType.OK) {
+        if (answer.isEmpty() || answer.get() != deleteType) {
             return;
         }
         try {
@@ -744,6 +773,20 @@ public class MainApp extends Application {
                 table.getSelectionModel().select(item);
                 return;
             }
+        }
+    }
+
+    /**
+     * Gives a dialog the same stylesheets and current theme as the main window.
+     *
+     * @param alert the dialog to style before it is shown
+     * @author Mashal and Umaina
+     */
+    private void styleDialog(Alert alert) {
+        DialogPane pane = alert.getDialogPane();
+        pane.getStylesheets().addAll(stylesheets);
+        if (themeToggle != null && themeToggle.isDark()) {
+            pane.getStyleClass().add(ThemeToggle.DARK_CLASS);
         }
     }
 

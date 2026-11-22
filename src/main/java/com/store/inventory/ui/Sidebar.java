@@ -21,8 +21,13 @@ import java.util.List;
  */
 public class Sidebar extends VBox {
 
+    /** Container for the navigation buttons. */
     private final VBox navItems = new VBox(4);
+
+    /** Container at the bottom of the sidebar. */
     private final VBox footer = new VBox(8);
+
+    /** All navigation buttons, used to move the "active" highlight. */
     private final List<Button> buttons = new ArrayList<>();
 
     /**

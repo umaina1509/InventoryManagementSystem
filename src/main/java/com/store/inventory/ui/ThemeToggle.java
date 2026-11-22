@@ -19,7 +19,10 @@ public class ThemeToggle extends Button {
     /** Style class that activates the dark palette. */
     public static final String DARK_CLASS = "dark";
 
+    /** Scene root that receives or loses the {@link #DARK_CLASS} style class. */
     private final Parent root;
+
+    /** Whether the dark theme is active. */
     private boolean dark;
 
     /**

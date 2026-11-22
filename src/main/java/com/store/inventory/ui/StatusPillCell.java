@@ -16,6 +16,7 @@ import javafx.scene.control.TableCell;
  */
 public class StatusPillCell extends TableCell<Item, StockStatus> {
 
+    /** The pill label, reused every time the cell shows a new row. */
     private final Label pill = new Label();
 
     /**
