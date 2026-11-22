@@ -16,7 +16,7 @@ import java.util.List;
  * <p>File format: a header line followed by one line per item with the columns
  * {@code id,name,quantity,status}. Names are quoted and embedded quotes are doubled.</p>
  *
- * @author umaina & mashal
+ * @author Mashal and Umaina
  */
 public class CsvInventoryRepository implements InventoryRepository {
 

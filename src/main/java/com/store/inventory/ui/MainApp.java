@@ -45,7 +45,7 @@ import java.util.Optional;
  * the right. All business rules live in {@link InventoryService}; this class
  * only collects input and displays results.</p>
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 public class MainApp extends Application {
 

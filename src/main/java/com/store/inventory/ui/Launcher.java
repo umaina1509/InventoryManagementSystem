@@ -9,7 +9,7 @@ import javafx.application.Application;
  * setups fails with "JavaFX runtime components are missing". Starting from
  * this class, which does not extend {@code Application}, avoids that problem.</p>
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 public final class Launcher {
 

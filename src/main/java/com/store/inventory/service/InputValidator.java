@@ -6,7 +6,7 @@ package com.store.inventory.service;
  * <p>All methods are static and throw {@link ValidationException} with a
  * message suitable for display when the input is not acceptable.</p>
  *
- * @author umaina & mashal
+ * @author Mashal and Umaina
  */
 public final class InputValidator {
 

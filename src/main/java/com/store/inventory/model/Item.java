@@ -6,7 +6,7 @@ package com.store.inventory.model;
  * <p>Each item has a unique identifier, a name, a quantity on hand and a
  * {@link StockStatus}.</p>
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 public class Item {
 

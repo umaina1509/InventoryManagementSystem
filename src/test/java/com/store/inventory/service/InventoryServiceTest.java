@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests for {@link InventoryService}. Test names follow the OEL test-case table.
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 class InventoryServiceTest {
 

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for {@link InputValidator}.
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 class InputValidatorTest {
 

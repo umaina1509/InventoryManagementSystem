@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests for {@link CsvInventoryRepository}.
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 class CsvInventoryRepositoryTest {
 

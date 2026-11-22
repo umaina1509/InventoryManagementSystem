@@ -14,7 +14,7 @@ import java.util.List;
  * <p>Every change is validated and then written to the {@link InventoryRepository}.
  * The class contains no user-interface code so it can be tested on its own.</p>
  *
- * @author umaina & mashal
+ * @author Mashal and Umaina
  */
 public class InventoryService {
 

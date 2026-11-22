@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 /**
  * Tests for {@link StockStatus}.
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 class StockStatusTest {
 

@@ -6,7 +6,7 @@ package com.store.inventory.model;
  * <p>The status is normally derived from the quantity on hand (see
  * {@link #fromQuantity(int)}), but the user may also set it manually.</p>
  *
- * @author Mashal Areej
+ * @author Mashal and Umaina
  */
 public enum StockStatus {
 
