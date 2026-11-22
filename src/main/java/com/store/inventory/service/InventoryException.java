@@ -5,7 +5,7 @@ package com.store.inventory.service;
  *
  * <p>The message of every subclass is written to be shown directly to the user.</p>
  *
- * @author YOUR_NAME
+ * @author umaina & mashal
  */
 public class InventoryException extends RuntimeException {
 

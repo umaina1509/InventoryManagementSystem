@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Abstraction over where inventory data is persisted.
  *
- * @author YOUR_NAME
+ * @author umaina & mashal
  */
 public interface InventoryRepository {
 

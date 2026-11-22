@@ -3,7 +3,7 @@ package com.store.inventory.service;
 /**
  * Thrown when user input fails validation (empty name, invalid quantity, duplicate name).
  *
- * @author YOUR_NAME
+ * @author umaina & mashal
  */
 public class ValidationException extends InventoryException {
 

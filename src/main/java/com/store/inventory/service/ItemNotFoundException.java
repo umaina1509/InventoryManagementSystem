@@ -3,7 +3,7 @@ package com.store.inventory.service;
 /**
  * Thrown when an operation refers to an item id that does not exist.
  *
- * @author YOUR_NAME
+ * @author umaina & mashal
  */
 public class ItemNotFoundException extends InventoryException {
 

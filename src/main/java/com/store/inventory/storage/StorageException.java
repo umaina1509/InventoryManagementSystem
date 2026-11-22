@@ -5,7 +5,7 @@ import com.store.inventory.service.InventoryException;
 /**
  * Thrown when inventory data cannot be read from or written to storage.
  *
- * @author YOUR_NAME
+ * @author umaina & mashal
  */
 public class StorageException extends InventoryException {
 

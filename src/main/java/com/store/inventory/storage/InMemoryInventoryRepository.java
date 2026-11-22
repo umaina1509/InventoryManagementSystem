@@ -10,7 +10,7 @@ import java.util.List;
  *
  * <p>Used as a fallback when the data file cannot be opened, and in unit tests.</p>
  *
- * @author YOUR_NAME
+ * @author umaina & mashal
  */
 public class InMemoryInventoryRepository implements InventoryRepository {
 
