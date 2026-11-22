@@ -16,7 +16,6 @@
 .pill,
 .placeholder-title,
 .table-view .column-header .label,
-.app-title,
-.section-title {
+.wordmark {
     -fx-font-family: "Segoe UI Semibold";
 }

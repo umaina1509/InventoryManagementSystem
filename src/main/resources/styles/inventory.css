@@ -80,8 +80,7 @@
 .pill,
 .placeholder-title,
 .table-view .column-header .label,
-.app-title,
-.section-title {
+.wordmark {
     -fx-font-family: "Manrope SemiBold";
 }
 
@@ -364,49 +363,82 @@
     -fx-text-fill: -c-in-fg;
 }
 
+
 /* ===================================================================
-   Current layout (replaced by the sidebar layout in the next step)
+   Sidebar
    =================================================================== */
-.header {
-    -fx-background-color: -c-surface;
-    -fx-padding: 16 24 16 24;
-    -fx-border-color: transparent transparent -c-border transparent;
-    -fx-border-width: 0 0 1 0;
+.sidebar {
+    -fx-background-color: -c-sidebar;
+    -fx-padding: 24 16 24 16;
+    -fx-pref-width: 216;
+    -fx-min-width: 216;
 }
-.app-title {
-    -fx-font-size: 22px;
-    -fx-text-fill: -c-text;
+.wordmark {
+    -fx-font-size: 18px;
+    -fx-text-fill: -c-sidebar-title;
 }
-.app-subtitle {
-    -fx-text-fill: -c-muted;
+.wordmark-tagline {
+    -fx-font-size: 12px;
+    -fx-text-fill: -c-sidebar-text;
 }
-.section-title {
-    -fx-font-size: 14px;
-    -fx-text-fill: -c-text;
+.sidebar .section-label {
+    -fx-text-fill: -c-sidebar-text;
+    -fx-opacity: 0.7;
 }
-.form-pane {
+.button.nav-item {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: -c-sidebar-text;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 8 12 8 12;
+}
+.button.nav-item:hover,
+.button.nav-item:focused {
+    -fx-background-color: -c-sidebar-hover;
+    -fx-border-color: transparent;
+    -fx-text-fill: -c-sidebar-title;
+}
+.button.nav-item.active,
+.button.nav-item.active:hover,
+.button.nav-item.active:focused {
+    -fx-background-color: -c-accent;
+    -fx-border-color: -c-accent;
+    -fx-text-fill: -c-on-accent;
+}
+
+/* ===================================================================
+   Page layout
+   =================================================================== */
+.page {
+    -fx-padding: 32 32 32 32;
+}
+.search-box .text-field {
+    -fx-padding: 7 10 7 32;
+    -fx-pref-width: 280;
+}
+.icon {
+    -fx-fill: -c-muted;
+}
+
+/* Cards: flat surface, 1px border, 8px radius */
+.card {
     -fx-background-color: -c-surface;
     -fx-border-color: -c-border;
     -fx-border-width: 1;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
 }
-.table-cell.status-in {
-    -fx-text-fill: -c-in-fg;
+.table-card {
+    -fx-padding: 16 8 8 8;
 }
-.table-cell.status-low {
-    -fx-text-fill: -c-low-fg;
+.card-header {
+    -fx-padding: 0 8 0 12;
+    -fx-min-height: 32;
 }
-.table-cell.status-out {
-    -fx-text-fill: -c-out-fg;
-}
-.status-bar {
-    -fx-background-color: -c-surface;
-    -fx-border-color: -c-border transparent transparent transparent;
-    -fx-border-width: 1 0 0 0;
-    -fx-padding: 8 24 8 24;
-}
-.status-bar .label {
-    -fx-text-fill: -c-muted;
+.count-label {
     -fx-font-size: 12px;
+    -fx-text-fill: -c-muted;
+}
+.form-card {
+    -fx-padding: 24 24 24 24;
 }
