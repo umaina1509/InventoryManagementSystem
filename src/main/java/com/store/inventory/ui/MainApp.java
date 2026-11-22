@@ -76,6 +76,7 @@ public class MainApp extends Application {
     private static final String EMPTY_INVENTORY_MESSAGE =
             "The inventory is empty. Add an item using the form on the right.";
     private static final String NO_RESULTS_MESSAGE = "No items match your search.";
+    private static final String OUT_OF_STOCK_NOTE = "Quantity set to 0 because status is Out of Stock";
     private static final String NO_FILTER_RESULTS_MESSAGE = "No items match the selected filter.";
     private static final String NO_COMBINED_RESULTS_MESSAGE =
             "No items match your search and the selected filter.";
@@ -107,6 +108,9 @@ public class MainApp extends Application {
     private ComboBox<String> statusBox;
     private Label nameError;
     private Label quantityError;
+
+    /** Muted note under Quantity, shown while the status is Out of Stock. */
+    private Label quantityNote;
     private Label feedbackLabel;
 
     /**
@@ -395,6 +399,12 @@ public class MainApp extends Application {
         quantityField = new TextField();
         quantityField.setPromptText("0 or more");
         quantityError = createErrorLabel();
+        quantityNote = new Label(OUT_OF_STOCK_NOTE);
+        quantityNote.getStyleClass().add("field-note");
+        quantityNote.setWrapText(true);
+        quantityNote.setMinHeight(Region.USE_PREF_SIZE);
+        quantityNote.managedProperty().bind(quantityNote.visibleProperty());
+        quantityNote.setVisible(false);
 
         statusBox = new ComboBox<>();
         statusBox.getItems().add(AUTO_STATUS);
@@ -406,11 +416,12 @@ public class MainApp extends Application {
 
         nameField.textProperty().addListener((obs, o, n) -> clearFieldError(nameField, nameError));
         quantityField.textProperty().addListener((obs, o, n) -> clearFieldError(quantityField, quantityError));
+        statusBox.valueProperty().addListener((obs, o, n) -> applyOutOfStockRule());
 
         VBox fields = new VBox(16,
                 createField("Name", nameField, nameError),
-                createField("Quantity", quantityField, quantityError),
-                createField("Status", statusBox, null));
+                createField("Quantity", quantityField, quantityError, quantityNote),
+                createField("Status", statusBox));
 
         Button addButton = new Button("Add item");
         addButton.getStyleClass().add("primary");
@@ -477,22 +488,21 @@ public class MainApp extends Application {
     }
 
     /**
-     * Groups a field label, an input control and an optional error message.
+     * Groups a field label, an input control and any message labels shown under it.
      *
      * @param labelText the field label text
      * @param input     the input control
-     * @param error     the label used for inline errors, or {@code null} if the field has none
+     * @param messages  labels placed under the input, such as the inline error
+     *                  and the Out of Stock note; may be empty
      * @return the field group
      * @author Mashal and Umaina
      */
-    private VBox createField(String labelText, Control input, Label error) {
+    private VBox createField(String labelText, Control input, Label... messages) {
         Label label = new Label(labelText);
         label.getStyleClass().add("field-label");
         label.setLabelFor(input);
         VBox group = new VBox(6, label, input);
-        if (error != null) {
-            group.getChildren().add(error);
-        }
+        group.getChildren().addAll(messages);
         return group;
     }
 
@@ -517,12 +527,14 @@ public class MainApp extends Application {
     // ------------------------------------------------------------------
 
     /**
-     * Adds a new item from the form after checking the fields.
+     * Adds a new item from the form after checking the fields. An item added
+     * with status Out of Stock is always saved with quantity 0.
      *
      * @author Mashal and Umaina
      */
     private void onAdd() {
         feedbackLabel.setText("");
+        applyOutOfStockRule(); // overrides a number typed after choosing Out of Stock
         if (!validateFields()) {
             return;
         }
@@ -541,7 +553,8 @@ public class MainApp extends Application {
     }
 
     /**
-     * Saves the form values to the item selected in the table.
+     * Saves the form values to the item selected in the table. An item saved
+     * with status Out of Stock always gets quantity 0.
      *
      * @author Mashal and Umaina
      */
@@ -552,6 +565,7 @@ public class MainApp extends Application {
             showError("Select an item in the table before updating.");
             return;
         }
+        applyOutOfStockRule(); // overrides a number typed after choosing Out of Stock
         if (!validateFields()) {
             return; // keep the selection so the user can correct the input
         }
@@ -676,6 +690,24 @@ public class MainApp extends Application {
     }
 
     /**
+     * Applies the rule "Out of Stock means quantity 0" to the form.
+     *
+     * <p>If the chosen status is Out of Stock, the Quantity field is set to
+     * "0" and a short note explains why. For any other status the note is
+     * hidden and the quantity is left as it is (an earlier quantity is not
+     * restored), so Auto, In Stock and Low Stock behave as before.</p>
+     *
+     * @author Mashal and Umaina
+     */
+    private void applyOutOfStockRule() {
+        boolean outOfStock = selectedStatus() == StockStatus.OUT_OF_STOCK;
+        if (outOfStock && !"0".equals(quantityField.getText())) {
+            quantityField.setText("0");
+        }
+        quantityNote.setVisible(outOfStock);
+    }
+
+    /**
      * Copies an item's values into the form.
      *
      * @param item the item to show
@@ -686,6 +718,7 @@ public class MainApp extends Application {
         quantityField.setText(String.valueOf(item.getQuantity()));
         boolean followsQuantity = item.getStatus() == StockStatus.fromQuantity(item.getQuantity());
         statusBox.setValue(followsQuantity ? AUTO_STATUS : item.getStatus().getLabel());
+        applyOutOfStockRule(); // also needed when the status value did not change
         clearFieldError(nameField, nameError);
         clearFieldError(quantityField, quantityError);
         feedbackLabel.setText("");

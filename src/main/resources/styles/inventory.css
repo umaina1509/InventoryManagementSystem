@@ -395,6 +395,10 @@
 .field-error {
     -fx-font-size: 12px;
 }
+.field-note {
+    -fx-font-size: 12px;
+    -fx-text-fill: -c-muted;
+}
 .feedback-ok {
     -fx-text-fill: -c-in-fg;
 }
