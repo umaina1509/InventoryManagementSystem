@@ -1,0 +1,4 @@
+com.store.inventory.model
+com.store.inventory.service
+com.store.inventory.storage
+com.store.inventory.ui
