@@ -16,6 +16,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,9 +26,12 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -65,10 +69,22 @@ public class MainApp extends Application {
     private static final String EMPTY_INVENTORY_MESSAGE =
             "The inventory is empty. Add an item using the form on the right.";
     private static final String NO_RESULTS_MESSAGE = "No items match your search.";
+    private static final String NO_FILTER_RESULTS_MESSAGE = "No items match the selected filter.";
+    private static final String NO_COMBINED_RESULTS_MESSAGE =
+            "No items match your search and the selected filter.";
 
     private InventoryService service;
     private final ObservableList<Item> tableData = FXCollections.observableArrayList();
     private FilteredList<Item> filteredData;
+
+    /** Status chosen with the filter chips, or {@code null} for "All". */
+    private StockStatus statusFilter;
+    private final ToggleGroup filterGroup = new ToggleGroup();
+
+    private StatCard totalCard;
+    private StatCard inStockCard;
+    private StatCard lowStockCard;
+    private StatCard outOfStockCard;
 
     private TableView<Item> table;
     private Label placeholderTitle;
@@ -144,7 +160,8 @@ public class MainApp extends Application {
     }
 
     /**
-     * Builds the inventory page: header, then the table and the item form side by side.
+     * Builds the inventory page: header, stat cards, then the table and the
+     * item form side by side.
      *
      * @return the inventory page
      * @author Mashal and Umaina
@@ -154,7 +171,7 @@ public class MainApp extends Application {
         HBox body = new HBox(16, buildTableCard(), buildFormCard());
         VBox.setVgrow(body, Priority.ALWAYS);
 
-        VBox page = new VBox(24, header, body);
+        VBox page = new VBox(24, header, buildStatRow(), body);
         page.getStyleClass().add("page");
         return page;
     }
@@ -187,7 +204,66 @@ public class MainApp extends Application {
     }
 
     /**
-     * Builds the card that holds the items table.
+     * Builds the row of four stat cards (total and one per stock status).
+     *
+     * @return the stat card row
+     * @author Mashal and Umaina
+     */
+    private Region buildStatRow() {
+        totalCard = new StatCard("Total items", null);
+        inStockCard = new StatCard(StockStatus.IN_STOCK.getLabel(), "dot-in");
+        lowStockCard = new StatCard(StockStatus.LOW_STOCK.getLabel(), "dot-low");
+        outOfStockCard = new StatCard(StockStatus.OUT_OF_STOCK.getLabel(), "dot-out");
+
+        HBox row = new HBox(16, totalCard, inStockCard, lowStockCard, outOfStockCard);
+        for (StatCard card : new StatCard[] {totalCard, inStockCard, lowStockCard, outOfStockCard}) {
+            HBox.setHgrow(card, Priority.ALWAYS);
+        }
+        return row;
+    }
+
+    /**
+     * Builds the status filter chips: All, In Stock, Low Stock and Out of Stock.
+     *
+     * @return the row of chips
+     * @author Mashal and Umaina
+     */
+    private HBox buildFilterChips() {
+        HBox chips = new HBox(8, createChip("All", null));
+        for (StockStatus status : StockStatus.values()) {
+            chips.getChildren().add(createChip(status.getLabel(), status));
+        }
+        filterGroup.selectToggle(filterGroup.getToggles().get(0));
+        filterGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                filterGroup.selectToggle(oldToggle); // one chip is always selected
+                return;
+            }
+            statusFilter = (StockStatus) newToggle.getUserData();
+            applyFilter();
+        });
+        chips.setAlignment(Pos.CENTER_LEFT);
+        return chips;
+    }
+
+    /**
+     * Creates one filter chip.
+     *
+     * @param text   the chip text
+     * @param status the status the chip filters on, or {@code null} for "All"
+     * @return the chip
+     * @author Mashal and Umaina
+     */
+    private ToggleButton createChip(String text, StockStatus status) {
+        ToggleButton chip = new ToggleButton(text);
+        chip.getStyleClass().add("chip");
+        chip.setUserData(status);
+        chip.setToggleGroup(filterGroup);
+        return chip;
+    }
+
+    /**
+     * Builds the card that holds the filter chips and the items table.
      *
      * @return the table card
      * @author Mashal and Umaina
@@ -195,7 +271,7 @@ public class MainApp extends Application {
     private Region buildTableCard() {
         countLabel = new Label();
         countLabel.getStyleClass().add("count-label");
-        HBox cardHeader = new HBox(8, UiKit.sectionLabel("Items"), UiKit.horizontalSpacer(), countLabel);
+        HBox cardHeader = new HBox(8, buildFilterChips(), UiKit.horizontalSpacer(), countLabel);
         cardHeader.getStyleClass().add("card-header");
         cardHeader.setAlignment(Pos.CENTER_LEFT);
 
@@ -209,7 +285,8 @@ public class MainApp extends Application {
     }
 
     /**
-     * Builds the items table with its columns, placeholder and search filter.
+     * Builds the items table with its columns, placeholder, filtering and sorting.
+     * Clicking a column header sorts by that column.
      *
      * @return the configured table
      * @author Mashal and Umaina
@@ -251,7 +328,9 @@ public class MainApp extends Application {
         itemTable.setPlaceholder(placeholder);
 
         filteredData = new FilteredList<>(tableData, item -> true);
-        itemTable.setItems(filteredData);
+        SortedList<Item> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(itemTable.comparatorProperty());
+        itemTable.setItems(sortedData);
         searchField.textProperty().addListener((obs, oldText, newText) -> applyFilter());
 
         itemTable.getSelectionModel().selectedItemProperty().addListener((obs, oldItem, newItem) -> {
@@ -324,6 +403,7 @@ public class MainApp extends Application {
 
         feedbackLabel = new Label();
         feedbackLabel.setWrapText(true);
+        feedbackLabel.setMinHeight(Region.USE_PREF_SIZE);
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -333,9 +413,20 @@ public class MainApp extends Application {
                 + "1 to " + StockStatus.LOW_STOCK_THRESHOLD + " is Low Stock.");
         hint.getStyleClass().add("hint");
         hint.setWrapText(true);
+        hint.setMinHeight(Region.USE_PREF_SIZE); // never cut the hint down to "..."
 
-        VBox card = new VBox(16, UiKit.sectionLabel("Item details"), fields, buttons,
+        VBox content = new VBox(16, UiKit.sectionLabel("Item details"), fields, buttons,
                 feedbackLabel, spacer, hint);
+        content.getStyleClass().add("form-content");
+
+        // Scrolls only when the window is too short to show the whole form.
+        ScrollPane scroller = new ScrollPane(content);
+        scroller.getStyleClass().add("form-scroll");
+        scroller.setFitToWidth(true);
+        scroller.setFitToHeight(true);
+        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        StackPane card = new StackPane(scroller);
         card.getStyleClass().addAll("card", "form-card");
         card.setPrefWidth(300);
         card.setMinWidth(300);
@@ -373,6 +464,7 @@ public class MainApp extends Application {
         Label error = new Label();
         error.getStyleClass().add("field-error");
         error.setWrapText(true);
+        error.setMinHeight(Region.USE_PREF_SIZE);
         error.managedProperty().bind(error.visibleProperty());
         error.setVisible(false);
         return error;
@@ -567,26 +659,43 @@ public class MainApp extends Application {
     }
 
     /**
-     * Reloads the table from the service and updates the counts and placeholder.
+     * Reloads the table from the service and updates the stat cards, counts
+     * and placeholder.
      *
      * @author Mashal and Umaina
      */
     private void refreshTable() {
         tableData.setAll(service.getAllItems());
+        totalCard.setValue(service.getAllItems().size());
+        inStockCard.setValue(service.countByStatus(StockStatus.IN_STOCK));
+        lowStockCard.setValue(service.countByStatus(StockStatus.LOW_STOCK));
+        outOfStockCard.setValue(service.countByStatus(StockStatus.OUT_OF_STOCK));
         updateCountsAndPlaceholder();
     }
 
     /**
-     * Filters the table by the search text.
+     * Filters the table by the search text combined with the selected status chip.
      *
      * @author Mashal and Umaina
      */
     private void applyFilter() {
-        String text = searchField.getText();
-        String query = text == null ? "" : text.trim().toLowerCase();
-        filteredData.setPredicate(item -> query.isEmpty()
-                || item.getName().toLowerCase().contains(query));
+        String query = currentQuery();
+        StockStatus status = statusFilter;
+        filteredData.setPredicate(item ->
+                (query.isEmpty() || item.getName().toLowerCase().contains(query))
+                && (status == null || item.getStatus() == status));
         updateCountsAndPlaceholder();
+    }
+
+    /**
+     * Returns the search text, trimmed and in lower case.
+     *
+     * @return the search query; empty if the search field is empty
+     * @author Mashal and Umaina
+     */
+    private String currentQuery() {
+        String text = searchField.getText();
+        return text == null ? "" : text.trim().toLowerCase();
     }
 
     /**
@@ -604,8 +713,16 @@ public class MainApp extends Application {
             placeholderTitle.setText("No items yet");
             placeholderBody.setText(EMPTY_INVENTORY_MESSAGE);
         } else {
+            boolean searching = !currentQuery().isEmpty();
+            boolean filtering = statusFilter != null;
             placeholderTitle.setText("Nothing found");
-            placeholderBody.setText(NO_RESULTS_MESSAGE);
+            if (searching && filtering) {
+                placeholderBody.setText(NO_COMBINED_RESULTS_MESSAGE);
+            } else if (filtering) {
+                placeholderBody.setText(NO_FILTER_RESULTS_MESSAGE);
+            } else {
+                placeholderBody.setText(NO_RESULTS_MESSAGE);
+            }
         }
     }
 

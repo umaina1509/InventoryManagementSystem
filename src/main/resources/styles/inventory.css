@@ -80,7 +80,8 @@
 .pill,
 .placeholder-title,
 .table-view .column-header .label,
-.wordmark {
+.wordmark,
+.stat-value {
     -fx-font-family: "Manrope SemiBold";
 }
 
@@ -410,7 +411,7 @@
    Page layout
    =================================================================== */
 .page {
-    -fx-padding: 32 32 32 32;
+    -fx-padding: 24 32 24 32;
 }
 .search-box .text-field {
     -fx-padding: 7 10 7 32;
@@ -440,5 +441,69 @@
     -fx-text-fill: -c-muted;
 }
 .form-card {
+    -fx-padding: 1;
+}
+.form-content {
     -fx-padding: 24 24 24 24;
+}
+/* Invisible scroll container around the form */
+.form-scroll,
+.form-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* ===================================================================
+   Stat cards
+   =================================================================== */
+.stat-card {
+    -fx-padding: 16 20 16 20;
+}
+.stat-value {
+    -fx-font-size: 28px;
+    -fx-text-fill: -c-text;
+}
+.stat-dot {
+    -fx-min-width: 8;
+    -fx-min-height: 8;
+    -fx-max-width: 8;
+    -fx-max-height: 8;
+    -fx-background-radius: 4;
+}
+.dot-in {
+    -fx-background-color: -c-in-fg;
+}
+.dot-low {
+    -fx-background-color: -c-low-fg;
+}
+.dot-out {
+    -fx-background-color: -c-out-fg;
+}
+
+/* ===================================================================
+   Filter chips
+   =================================================================== */
+.toggle-button.chip {
+    -fx-background-color: transparent;
+    -fx-border-color: -c-border-strong;
+    -fx-border-width: 1;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 5 12 5 12;
+    -fx-font-size: 12px;
+    -fx-text-fill: -c-muted;
+    -fx-cursor: hand;
+}
+.toggle-button.chip:hover,
+.toggle-button.chip:focused {
+    -fx-background-color: -c-surface-alt;
+    -fx-text-fill: -c-text;
+}
+.toggle-button.chip:selected,
+.toggle-button.chip:selected:hover,
+.toggle-button.chip:selected:focused {
+    -fx-background-color: -c-primary;
+    -fx-border-color: -c-primary;
+    -fx-text-fill: -c-on-primary;
 }
