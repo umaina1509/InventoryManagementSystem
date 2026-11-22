@@ -1,151 +1,412 @@
-/* Inventory Management System - JavaFX stylesheet
-   Palette: white background, blue (#1F5FA8) accent, greys for structure. */
+/* StockRoom - Inventory Management System stylesheet
+ *
+ * Colours are defined ONCE below as looked-up colours on .root. Every other
+ * rule refers to these names (-c-...), never to raw hex values, so a theme
+ * only has to redefine the palette.
+ *
+ * Spacing follows an 8px grid. Corner radius: 8px on cards, 6px on inputs
+ * and buttons. Separation uses 1px borders, never shadows.
+ */
 
+/* ===================================================================
+   Palette (light theme)
+   =================================================================== */
 .root {
-    -fx-background-color: white;
-    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    -fx-font-size: 13px;
-    -fx-accent: #1F5FA8;
-    -fx-focus-color: #1F5FA8;
+    /* Surfaces */
+    -c-bg: #F4F1E8;
+    -c-surface: #FBF9F4;
+    -c-surface-alt: #F0ECE1;
+    -c-selected: #E3EBEC;
+
+    /* Sidebar */
+    -c-sidebar: #1E4A5C;
+    -c-sidebar-title: #F4F1E8;
+    -c-sidebar-text: #C5D3D8;
+    -c-sidebar-hover: #255669;
+
+    /* Brand */
+    -c-primary: #1E4A5C;
+    -c-primary-hover: #173B4A;
+    -c-on-primary: #FBF9F4;
+    -c-accent: #E9B949;
+    -c-on-accent: #1C2B33;
+
+    /* Text and lines */
+    -c-text: #1C2B33;
+    -c-muted: #6B7A80;
+    -c-border: #E2DDD0;
+    -c-border-strong: #CBC4B2;
+
+    /* Stock status (also used for success / error messages) */
+    -c-in-bg: #CFE3D3;
+    -c-in-fg: #2F6B45;
+    -c-low-bg: #F3E2B5;
+    -c-low-fg: #8A6412;
+    -c-out-bg: #F1D0C6;
+    -c-out-fg: #9A3B22;
+
+    /* Hand the palette to JavaFX's built-in Modena theme */
+    -fx-base: -c-surface;
+    -fx-background: -c-bg;
+    -fx-control-inner-background: -c-surface;
+    -fx-control-inner-background-alt: -c-surface;
+    -fx-accent: -c-primary;
+    -fx-focus-color: -c-primary;
     -fx-faint-focus-color: transparent;
+    -fx-selection-bar: -c-selected;
+    -fx-selection-bar-non-focused: -c-selected;
+    -fx-selection-bar-text: -c-text;
+    -fx-text-base-color: -c-text;
+    -fx-text-background-color: -c-text;
+    -fx-text-inner-color: -c-text;
+    -fx-mark-color: -c-muted;
+    -fx-cell-hover-color: -c-surface-alt;
+
+    -fx-background-color: -c-bg;
+    -fx-font-family: "Manrope";
+    -fx-font-size: 13px;
 }
 
-/* ---- Header ---- */
-.header {
-    -fx-background-color: white;
-    -fx-padding: 14 20 12 20;
-    -fx-border-color: transparent transparent #D0D5DB transparent;
-    -fx-border-width: 0 0 1 0;
-}
-.app-title {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1F5FA8;
-}
-.app-subtitle {
-    -fx-font-size: 12px;
-    -fx-text-fill: #6B7280;
-}
+/* ===================================================================
+   Typography
+   =================================================================== */
 
-/* ---- Section headings ---- */
+/* Semibold text. Keep this selector list in sync with fallback-fonts.css. */
+.page-title,
+.section-label,
+.field-label,
+.button,
+.toggle-button,
+.pill,
+.placeholder-title,
+.table-view .column-header .label,
+.app-title,
 .section-title {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #374151;
+    -fx-font-family: "Manrope SemiBold";
 }
 
-/* ---- Form panel ---- */
-.form-pane {
-    -fx-background-color: #F3F4F6;
-    -fx-border-color: #D0D5DB;
-    -fx-border-width: 1;
+.page-title {
+    -fx-font-size: 26px;
+    -fx-text-fill: -c-text;
 }
-.form-pane .label {
-    -fx-text-fill: #374151;
+.page-subtitle {
+    -fx-text-fill: -c-muted;
+}
+.section-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -c-muted;
+}
+.field-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -c-text;
 }
 .hint {
-    -fx-text-fill: #6B7280;
     -fx-font-size: 12px;
+    -fx-text-fill: -c-muted;
 }
 
-/* ---- Inputs ---- */
-.text-field, .combo-box-base {
-    -fx-background-color: white;
-    -fx-border-color: #B8BEC6;
+/* ===================================================================
+   Inputs
+   =================================================================== */
+.text-field,
+.combo-box {
+    -fx-background-color: -c-surface;
+    -fx-border-color: -c-border-strong;
     -fx-border-width: 1;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
 }
-.text-field:focused, .combo-box-base:focused {
-    -fx-border-color: #1F5FA8;
+.text-field {
+    -fx-padding: 7 10 7 10;
+    -fx-text-fill: -c-text;
+    -fx-prompt-text-fill: -c-muted;
+    -fx-highlight-fill: -c-selected;
+    -fx-highlight-text-fill: -c-text;
+}
+.text-field:focused,
+.combo-box:focused,
+.combo-box:showing {
+    -fx-border-color: -c-primary;
+}
+.text-field.invalid,
+.text-field.invalid:focused {
+    -fx-border-color: -c-out-fg;
 }
 
-/* ---- Buttons ---- */
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -c-text;
+    -fx-padding: 7 10 7 10;
+}
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 12 0 4;
+}
+.combo-box .arrow {
+    -fx-background-color: -c-muted;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: -c-surface;
+    -fx-border-color: -c-border;
+    -fx-border-width: 1;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 4;
+    -fx-effect: null;
+}
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 4;
+    -fx-text-fill: -c-text;
+    -fx-padding: 6 10 6 10;
+}
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: -c-surface-alt;
+}
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: -c-selected;
+}
+
+/* ===================================================================
+   Buttons
+   =================================================================== */
 .button {
-    -fx-background-color: #E5E7EB;
-    -fx-text-fill: #1F2937;
-    -fx-border-color: #B8BEC6;
+    -fx-background-color: -c-surface;
+    -fx-border-color: -c-border-strong;
     -fx-border-width: 1;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-padding: 6 14 6 14;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-text-fill: -c-text;
+    -fx-padding: 8 16 8 16;
     -fx-cursor: hand;
 }
 .button:hover {
-    -fx-background-color: #D8DBE0;
+    -fx-background-color: -c-surface-alt;
 }
-.button:pressed {
-    -fx-background-color: #C9CDD3;
-}
-.button.primary {
-    -fx-background-color: #1F5FA8;
-    -fx-border-color: #174A85;
-    -fx-text-fill: white;
-}
-.button.primary:hover {
-    -fx-background-color: #1A5191;
-}
-.button.primary:pressed {
-    -fx-background-color: #174A85;
+.button:focused {
+    -fx-border-color: -c-primary;
 }
 
-/* ---- Table ---- */
+/* Primary: the one main action on a screen */
+.button.primary {
+    -fx-background-color: -c-primary;
+    -fx-border-color: -c-primary;
+    -fx-text-fill: -c-on-primary;
+}
+.button.primary:hover,
+.button.primary:focused {
+    -fx-background-color: -c-primary-hover;
+    -fx-border-color: -c-primary-hover;
+}
+
+/* Danger: outlined in terracotta, filled only on hover */
+.button.danger {
+    -fx-background-color: transparent;
+    -fx-border-color: -c-out-fg;
+    -fx-text-fill: -c-out-fg;
+}
+.button.danger:hover,
+.button.danger:focused {
+    -fx-background-color: -c-out-bg;
+    -fx-border-color: -c-out-fg;
+}
+
+/* Text button: no box, just a quiet link-like label */
+.button.text-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: -c-muted;
+    -fx-padding: 6 8 6 8;
+}
+.button.text-button:hover,
+.button.text-button:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: -c-text;
+    -fx-underline: true;
+}
+
+/* ===================================================================
+   Table
+   =================================================================== */
 .table-view {
-    -fx-background-color: white;
-    -fx-border-color: #D0D5DB;
-    -fx-border-width: 1;
-    -fx-table-cell-border-color: #E5E7EB;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-table-cell-border-color: transparent;
+}
+.table-view:focused {
+    -fx-background-color: transparent;
 }
 .table-view .column-header-background {
-    -fx-background-color: #F3F4F6;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -c-border transparent;
+    -fx-border-width: 0 0 1 0;
 }
-.table-view .column-header, .table-view .filler {
-    -fx-background-color: #F3F4F6;
-    -fx-border-color: transparent #D0D5DB #D0D5DB transparent;
-    -fx-size: 32;
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 40;
 }
 .table-view .column-header .label {
-    -fx-font-weight: bold;
-    -fx-text-fill: #374151;
+    -fx-font-size: 11px;
+    -fx-text-fill: -c-muted;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 12 0 12;
 }
+.table-view .column-header.numeric .label {
+    -fx-alignment: CENTER-RIGHT;
+}
+.table-view .column-header .arrow {
+    -fx-background-color: -c-muted;
+}
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
 .table-row-cell {
-    -fx-background-color: white;
-    -fx-cell-size: 32;
+    -fx-background-color: -c-surface;
+    -fx-border-color: transparent transparent -c-border transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 40;
 }
-.table-row-cell:odd {
-    -fx-background-color: #FAFAFB;
+.table-row-cell:hover {
+    -fx-background-color: -c-surface-alt;
 }
-.table-row-cell:selected {
-    -fx-background-color: #D6E4F5;
+.table-row-cell:empty,
+.table-row-cell:empty:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
-.table-row-cell:selected .table-cell {
-    -fx-text-fill: #111827;
+/* Selected row: tinted, with a thin mustard marker on the left edge */
+.table-row-cell:selected,
+.table-row-cell:selected:hover {
+    -fx-background-color: -c-accent, -c-selected;
+    -fx-background-insets: 0, 0 0 0 3;
 }
 .table-cell {
-    -fx-text-fill: #1F2937;
+    -fx-text-fill: -c-text;
     -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 12 0 12;
+    -fx-border-color: transparent;
 }
-.table-view .placeholder .label {
-    -fx-text-fill: #6B7280;
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -c-text;
+}
+.table-cell.numeric {
+    -fx-alignment: CENTER-RIGHT;
+}
+.table-cell.id-cell {
+    -fx-text-fill: -c-muted;
 }
 
-/* Status text in the table */
-.table-cell.status-in  { -fx-text-fill: #1F5FA8; -fx-font-weight: bold; }
-.table-cell.status-low { -fx-text-fill: #374151; -fx-font-weight: bold; }
-.table-cell.status-out { -fx-text-fill: #6B7280; -fx-font-weight: bold; }
+/* Status pill shown in the Status column */
+.pill {
+    -fx-font-size: 12px;
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 999;
+}
+.pill-in {
+    -fx-background-color: -c-in-bg;
+    -fx-text-fill: -c-in-fg;
+}
+.pill-low {
+    -fx-background-color: -c-low-bg;
+    -fx-text-fill: -c-low-fg;
+}
+.pill-out {
+    -fx-background-color: -c-out-bg;
+    -fx-text-fill: -c-out-fg;
+}
 
-/* ---- Feedback messages ---- */
-.feedback-ok    { -fx-text-fill: #1F5FA8; }
-.feedback-error { -fx-text-fill: #B42318; }
+/* Empty-table placeholder */
+.placeholder-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: -c-text;
+}
+.placeholder-body {
+    -fx-text-fill: -c-muted;
+}
 
-/* ---- Bottom bar ---- */
+/* ===================================================================
+   Scroll bars (thin and quiet)
+   =================================================================== */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+.scroll-bar .thumb {
+    -fx-background-color: -c-border-strong;
+    -fx-background-insets: 2;
+    -fx-background-radius: 4;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0 2 0 2;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* ===================================================================
+   Messages
+   =================================================================== */
+.field-error,
+.feedback-error {
+    -fx-text-fill: -c-out-fg;
+}
+.field-error {
+    -fx-font-size: 12px;
+}
+.feedback-ok {
+    -fx-text-fill: -c-in-fg;
+}
+
+/* ===================================================================
+   Current layout (replaced by the sidebar layout in the next step)
+   =================================================================== */
+.header {
+    -fx-background-color: -c-surface;
+    -fx-padding: 16 24 16 24;
+    -fx-border-color: transparent transparent -c-border transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.app-title {
+    -fx-font-size: 22px;
+    -fx-text-fill: -c-text;
+}
+.app-subtitle {
+    -fx-text-fill: -c-muted;
+}
+.section-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: -c-text;
+}
+.form-pane {
+    -fx-background-color: -c-surface;
+    -fx-border-color: -c-border;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+.table-cell.status-in {
+    -fx-text-fill: -c-in-fg;
+}
+.table-cell.status-low {
+    -fx-text-fill: -c-low-fg;
+}
+.table-cell.status-out {
+    -fx-text-fill: -c-out-fg;
+}
 .status-bar {
-    -fx-background-color: #F3F4F6;
-    -fx-border-color: #D0D5DB transparent transparent transparent;
+    -fx-background-color: -c-surface;
+    -fx-border-color: -c-border transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
-    -fx-padding: 6 20 6 20;
+    -fx-padding: 8 24 8 24;
 }
 .status-bar .label {
-    -fx-text-fill: #4B5563;
+    -fx-text-fill: -c-muted;
     -fx-font-size: 12px;
 }

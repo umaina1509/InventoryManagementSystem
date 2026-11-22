@@ -1,0 +1,22 @@
+/* Fallback fonts for StockRoom.
+ *
+ * Added after inventory.css only when the bundled Manrope font could not be
+ * loaded. Keep the semibold selector list in sync with inventory.css.
+ */
+
+.root {
+    -fx-font-family: "Segoe UI";
+}
+
+.page-title,
+.section-label,
+.field-label,
+.button,
+.toggle-button,
+.pill,
+.placeholder-title,
+.table-view .column-header .label,
+.app-title,
+.section-title {
+    -fx-font-family: "Segoe UI Semibold";
+}

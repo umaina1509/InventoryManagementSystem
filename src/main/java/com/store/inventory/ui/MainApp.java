@@ -72,6 +72,7 @@ public class MainApp extends Application {
      */
     @Override
     public void start(Stage stage) {
+        boolean fontsLoaded = FontLoader.loadManrope();
         service = createService();
 
         BorderPane root = new BorderPane();
@@ -83,6 +84,9 @@ public class MainApp extends Application {
 
         Scene scene = new Scene(root, 980, 620);
         scene.getStylesheets().add(getClass().getResource("/styles/inventory.css").toExternalForm());
+        if (!fontsLoaded) {
+            scene.getStylesheets().add(getClass().getResource("/styles/fallback-fonts.css").toExternalForm());
+        }
 
         stage.setTitle("Inventory Management System");
         stage.setMinWidth(860);
