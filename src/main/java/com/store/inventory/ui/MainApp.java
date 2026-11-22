@@ -43,6 +43,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -169,13 +170,23 @@ public class MainApp extends Application {
     /**
      * Creates the service, falling back to memory-only storage if the data file is unreadable.
      *
+     * <p>On the very first start (no data file yet) the inventory is filled
+     * with {@link SampleData}. If the file exists, even when it is empty, it
+     * is loaded as it is and nothing is added, so an inventory the user has
+     * emptied stays empty.</p>
+     *
      * @return the inventory service used by the window
      * @author Mashal and Umaina
      */
     private InventoryService createService() {
+        boolean firstRun = !Files.exists(DATA_FILE);
         try {
             InventoryRepository repository = new CsvInventoryRepository(DATA_FILE);
-            return new InventoryService(repository);
+            InventoryService created = new InventoryService(repository);
+            if (firstRun) {
+                SampleData.seed(created);
+            }
+            return created;
         } catch (InventoryException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Storage problem");
