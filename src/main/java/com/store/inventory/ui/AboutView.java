@@ -46,7 +46,7 @@ public class AboutView extends VBox {
         addRow("Project", "StockRoom, an Inventory Management System for a small store");
         addRow("Course", "Software Construction (OEL)");
         addRow("Authors", "Mashal and Umaina");
-        addRow("Tech stack", "Java 17, JavaFX 21, Maven, JUnit 5");
+        addRow("Tech stack", "Java 27, JavaFX 21, Maven, JUnit 5");
         addRow("Storage", "CSV file (data/inventory.csv)");
         addRow("Typeface", "Manrope, SIL Open Font License 1.1");
 
