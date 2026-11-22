@@ -81,6 +81,7 @@ public class MainApp extends Application {
     private StockStatus statusFilter;
     private final ToggleGroup filterGroup = new ToggleGroup();
 
+    private ThemeToggle themeToggle;
     private StatCard totalCard;
     private StatCard inStockCard;
     private StatCard lowStockCard;
@@ -118,6 +119,9 @@ public class MainApp extends Application {
         BorderPane root = new BorderPane();
         root.setLeft(sidebar);
         root.setCenter(contentArea);
+
+        themeToggle = new ThemeToggle(root);
+        sidebar.setFooter(themeToggle);
 
         refreshTable();
 
@@ -404,9 +408,8 @@ public class MainApp extends Application {
         feedbackLabel = new Label();
         feedbackLabel.setWrapText(true);
         feedbackLabel.setMinHeight(Region.USE_PREF_SIZE);
-
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
+        // Takes no space (and adds no gap) while there is no message.
+        feedbackLabel.managedProperty().bind(feedbackLabel.textProperty().isNotEmpty());
 
         Label hint = new Label("Select a row in the table to edit or delete it. "
                 + "With \"Auto\", the status follows the quantity: 0 is Out of Stock, "
@@ -414,9 +417,12 @@ public class MainApp extends Application {
         hint.getStyleClass().add("hint");
         hint.setWrapText(true);
         hint.setMinHeight(Region.USE_PREF_SIZE); // never cut the hint down to "..."
+        VBox hintBox = new VBox(hint); // grows to push the hint to the bottom of the card
+        hintBox.setAlignment(Pos.BOTTOM_LEFT);
+        VBox.setVgrow(hintBox, Priority.ALWAYS);
 
         VBox content = new VBox(16, UiKit.sectionLabel("Item details"), fields, buttons,
-                feedbackLabel, spacer, hint);
+                feedbackLabel, hintBox);
         content.getStyleClass().add("form-content");
 
         // Scrolls only when the window is too short to show the whole form.

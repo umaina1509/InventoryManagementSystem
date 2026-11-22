@@ -68,6 +68,40 @@
 }
 
 /* ===================================================================
+   Palette (dark theme) - only the colours change, every rule stays the same
+   =================================================================== */
+.root.dark {
+    -c-bg: #12232B;
+    -c-surface: #1A2F38;
+    -c-surface-alt: #213A44;
+    -c-selected: #26444F;
+
+    -c-sidebar: #0E1D24;
+    -c-sidebar-title: #EDE8DC;
+    -c-sidebar-text: #93A3A8;
+    -c-sidebar-hover: #183039;
+
+    -c-primary: #2F6A80;
+    -c-primary-hover: #377A92;
+    -c-on-primary: #EDE8DC;
+    -c-accent: #E9B949;
+    -c-on-accent: #12232B;
+
+    -c-text: #EDE8DC;
+    -c-muted: #93A3A8;
+    -c-border: #2A4450;
+    -c-border-strong: #3A5866;
+
+    /* Deeper backgrounds, lighter text */
+    -c-in-bg: #23432F;
+    -c-in-fg: #A9D6B6;
+    -c-low-bg: #4A3B17;
+    -c-low-fg: #EDD08A;
+    -c-out-bg: #4F2A20;
+    -c-out-fg: #F0B2A0;
+}
+
+/* ===================================================================
    Typography
    =================================================================== */
 
@@ -506,4 +540,24 @@
     -fx-background-color: -c-primary;
     -fx-border-color: -c-primary;
     -fx-text-fill: -c-on-primary;
+}
+
+/* ===================================================================
+   Theme toggle (sidebar footer)
+   =================================================================== */
+.button.theme-toggle {
+    -fx-background-color: transparent;
+    -fx-border-color: -c-sidebar-hover;
+    -fx-text-fill: -c-sidebar-text;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 8 12 8 12;
+}
+.button.theme-toggle:hover,
+.button.theme-toggle:focused {
+    -fx-background-color: -c-sidebar-hover;
+    -fx-border-color: -c-accent;
+    -fx-text-fill: -c-sidebar-title;
+}
+.button.theme-toggle .icon {
+    -fx-fill: -c-accent;
 }
